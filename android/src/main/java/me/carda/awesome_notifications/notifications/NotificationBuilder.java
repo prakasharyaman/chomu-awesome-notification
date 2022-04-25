@@ -70,7 +70,7 @@ import static android.app.NotificationManager.Policy.PRIORITY_CATEGORY_ALARMS;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class NotificationBuilder {
- // this is the one that needs to be edited
+
     public static String TAG = "NotificationBuilder";
 
     public static ActionReceived receiveNotificationAction(Context context, Intent intent, NotificationLifeCycle appLifeCycle) {
@@ -426,8 +426,32 @@ public class NotificationBuilder {
         setBadge(context, notificationModel, channel, builder);
 
         setNotificationPendingIntents(notificationModel, pendingActionIntent, pendingDismissIntent, builder);
+        //creating a bit map for notifications
+        Bitmap image = BitmapUtils.getBitmapFromSource(
+                context,
+                notificationModel.content.bigPicture,
+                false);
 
+        Bitmap smallImage = BitmapUtils.getBitmapFromSource(
+                context,
+                notificationModel.content.bigPicture,
+                true);
+        if (image != null)
+            expandedView.setImageViewBitmap(R.id.expandedNotificationImage,image);
+        if (smallImage != null)
+            collapsedView.setImageViewBitmap(R.id.collapsedNotificationImage,image);
+System.out.println("creating a Chomu Notification \n com.android.chomu");
+
+        //setting expanded views
+        if (notificationModel.content.title != null) {
+            expandedView.setTextViewText(R.id.expandedNotificationTitle,notificationModel.content.title);
+            collapsedView.setTextViewText(R.id.collapsedNotificationTitle,notificationModel.content.title);
+        }
+        //setting collapsed views
+        builder.setCustomContentView(collapsedView);
+        builder.setCustomBigContentView(expandedView);
         Notification androidNotification = builder.build();
+
         if(androidNotification.extras == null)
             androidNotification.extras = new Bundle();
 
@@ -1087,7 +1111,7 @@ public class NotificationBuilder {
         * https://developer.android.com/guide/topics/media/media-controls
 	* https://github.com/rafaelsetragni/awesome_notifications/pull/364
         */
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R /*Android 11*/){		
 	        AwesomeNotificationsPlugin.mediaSession.setMetadata(
 			        new MediaMetadataCompat.Builder()
 					        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, contentModel.title)
