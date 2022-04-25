@@ -1,6 +1,6 @@
 
-# Awesome Notifications - Flutter
-
+# Chomu - Awesome Notifications - Flutter
+## Chomu - This Plugin Has Been Modified To Integrate Better With Chomu App 
 ![](https://raw.githubusercontent.com/rafaelsetragni/awesome_notifications/master/example/assets/readme/awesome-notifications.jpg)
 <div>
     
